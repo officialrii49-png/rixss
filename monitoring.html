@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+<div class="sidebar">
+
+    <h2>Rixsaa</h2>
+
+    <a href="index.html">🏠 Home</a>
+    <a href="monitoring.html">📡 Monitoring</a>
+    <a href="history.html">📜 Historis</a>
+    <a href="stats.html">📊 Statistik</a>
+    <a href="settings.html">⚙ Pengaturan</a>
+    <a href="login.html">🚪 Logout</a>
+
+</div>
+    <div class="dashboard-container">
+
+        <div class="topbar">
+            <h1 id="zoneTitle">Monitoring Area</h1>
+            <a href="index.html" class="back-btn">
+                ← Kembali
+            </a>
+        </div>
+
+        <div class="card-grid">
+
+            <div class="info-card">
+                <h3>Suhu</h3>
+                <div class="value" id="tempValue">0°C</div>
+            </div>
+
+            <div class="info-card">
+                <h3>Kelembaban</h3>
+                <div class="value" id="humValue">0%</div>
+            </div>
+
+        </div>
+
+        <div class="status-card">
+            <h3>Status Area</h3>
+            <p id="statusText">Menunggu data sensor...</p>
+        </div>
+
+        <div class="status-card">
+            <h3>Update Terakhir</h3>
+            <p id="updateTime">-</p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

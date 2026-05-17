@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Monitoring</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+
+<div class="dashboard-container">
+
+    <h1>Riwayat Sensor</h1>
+
+    <table class="history-table">
+
+        <thead>
+            <tr>
+                <th>Sensor</th>
+                <th>Zona</th>
+                <th>Suhu</th>
+                <th>Kelembaban</th>
+                <th>Waktu</th>
+            </tr>
+        </thead>
+
+        <tbody id="historyBody">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script>
+
+async function loadHistory(){
+
+    const response = await fetch(
+    'http://localhost/monitoring_suhu/api.php');
+
+    const data = await response.json();
+
+    let html = '';
+
+    data.sensors.forEach(sensor => {
+
+        html += `
+        <tr>
+            <td>${sensor.sensor_id}</td>
+            <td>${sensor.zone}</td>
+            <td>${sensor.temperature}°C</td>
+            <td>${sensor.humidity}%</td>
+            <td>${sensor.created_at}</td>
+        </tr>
+        `;
+
+    });
+
+    document.getElementById('historyBody').innerHTML = html;
+
+}
+
+loadHistory();
+
+</script>
+
+</body>
+</html>

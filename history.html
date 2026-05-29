@@ -1,67 +1,293 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat Monitoring</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Riwayat Sensor</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#07142b;
+            color:white;
+            min-height:100vh;
+        }
+
+        .container{
+            width:90%;
+            margin:auto;
+            padding:40px 0;
+        }
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:30px;
+        }
+
+        h1{
+            color:#40bfff;
+            font-size:56px;
+        }
+
+        .back-btn{
+            background:#2563eb;
+            color:white;
+            text-decoration:none;
+            padding:14px 24px;
+            border-radius:16px;
+            transition:0.3s;
+            font-size:18px;
+        }
+
+        .back-btn:hover{
+            background:#1d4ed8;
+        }
+
+        .table-container{
+            background:#1e293b;
+            border-radius:24px;
+            padding:25px;
+            overflow-x:auto;
+            border:1px solid rgba(255,255,255,0.08);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            color:#40bfff;
+            padding:18px;
+            text-align:left;
+            font-size:20px;
+            border-bottom:1px solid rgba(255,255,255,0.1);
+        }
+
+        td{
+            padding:18px;
+            font-size:18px;
+            border-bottom:1px solid rgba(255,255,255,0.05);
+        }
+
+        tr:hover{
+            background:rgba(255,255,255,0.03);
+        }
+
+        .status-normal{
+            color:#4ade80;
+            font-weight:bold;
+        }
+
+        .status-hot{
+            color:#f87171;
+            font-weight:bold;
+        }
+
+        @media(max-width:768px){
+
+            h1{
+                font-size:36px;
+            }
+
+            th,td{
+                font-size:14px;
+                padding:12px;
+            }
+
+        }
+
+        .action-buttons{
+            display:flex;
+            gap:15px;
+            margin-bottom:20px;
+        }
+
+        .export-btn,
+        .clear-btn{
+
+            border:none;
+            padding:12px 20px;
+            border-radius:12px;
+            cursor:pointer;
+            text-decoration:none;
+            color:white;
+            font-size:16px;
+        }
+
+        .export-btn{
+            background:#16a34a;
+        }
+
+        .clear-btn{
+            background:#dc2626;
+        }
+
+    </style>
+
 </head>
-<body class="dashboard-body">
 
-<div class="dashboard-container">
+<body>
 
-    <h1>Riwayat Sensor</h1>
+    <div class="container">
 
-    <table class="history-table">
+        <div class="topbar">
 
-        <thead>
-            <tr>
-                <th>Sensor</th>
-                <th>Zona</th>
-                <th>Suhu</th>
-                <th>Kelembaban</th>
-                <th>Waktu</th>
-            </tr>
-        </thead>
+            <h1>Riwayat Sensor</h1>
 
-        <tbody id="historyBody">
+            <a id="backBtn" class="back-btn">
+                ← Kembali
+            </a>
 
-        </tbody>
+        </div>
+        <div class="action-buttons">
 
-    </table>
+            <a href="export_excel.php" class="export-btn">
+                📥 Export Excel
+            </a>
 
-</div>
+            <button onclick="clearHistory()" class="clear-btn">
+                🗑 Clear History
+            </button>
+
+        </div>
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Sensor</th>
+                        <th>Zona</th>
+                        <th>Suhu</th>
+                        <th>Kelembaban</th>
+                        <th>Status</th>
+                        <th>Waktu</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="historyBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 <script>
 
 async function loadHistory(){
 
-    const response = await fetch(
-    'http://localhost/monitoring_suhu/api.php');
+    try{
+        const params =
+        new URLSearchParams(window.location.search);
 
-    const data = await response.json();
+        const zone =
+        params.get('zone') || 'masuk';
 
-    let html = '';
+        document.getElementById('backBtn')
+        .href =
+        `monitoring.html?zone=${zone}`;
+        const response = await fetch(
+        'http://localhost/monitoring_suhu/history_api.php');
 
-    data.sensors.forEach(sensor => {
+        const data = await response.json();
 
-        html += `
-        <tr>
-            <td>${sensor.sensor_id}</td>
-            <td>${sensor.zone}</td>
-            <td>${sensor.temperature}°C</td>
-            <td>${sensor.humidity}%</td>
-            <td>${sensor.created_at}</td>
-        </tr>
-        `;
+        let html = '';
 
-    });
+        data.sensors.forEach(sensor => {
 
-    document.getElementById('historyBody').innerHTML = html;
+            const suhu =
+            parseFloat(sensor.temp);
+
+            let status =
+            '<span class="status-normal">Normal</span>';
+
+            if(suhu > 30){
+
+                status =
+                '<span class="status-hot">Panas</span>';
+
+            }
+
+            html += `
+            <tr>
+
+                <td>${sensor.id}</td>
+
+                <td>${sensor.zone}</td>
+
+                <td>${sensor.temp}°C</td>
+
+                <td>${sensor.humidity}%</td>
+
+                <td>${status}</td>
+
+                <td>${sensor.time}</td>
+
+            </tr>
+            `;
+
+        });
+
+        document.getElementById('historyBody')
+        .innerHTML = html;
+
+    }
+    catch(error){
+
+        console.log(error);
+
+    }
 
 }
 
 loadHistory();
+
+// realtime refresh
+setInterval(loadHistory,3000);
+
+async function clearHistory(){
+
+    const confirmDelete =
+    confirm('Hapus semua riwayat sensor?');
+
+    if(!confirmDelete) return;
+
+    try{
+
+        await fetch(
+        'http://localhost/monitoring_suhu/clear_history.php',
+        {
+            method:'POST'
+        });
+
+        loadHistory();
+
+        alert('History berhasil dihapus');
+
+    }
+    catch(error){
+
+        console.log(error);
+
+    }
+
+}
 
 </script>
 

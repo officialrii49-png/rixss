@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik Sensor</title>
+
+    <!-- CHART JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#07142b;
+            color:white;
+            min-height:100vh;
+        }
+
+        .container{
+            width:90%;
+            margin:auto;
+            padding:40px 0;
+        }
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:30px;
+        }
+
+        h1{
+            font-size:56px;
+            color:#40bfff;
+        }
+
+        .back-btn{
+            background:#2563eb;
+            color:white;
+            text-decoration:none;
+            padding:14px 24px;
+            border-radius:16px;
+            transition:0.3s;
+            font-size:18px;
+        }
+
+        .back-btn:hover{
+            background:#1d4ed8;
+        }
+
+        .chart-container{
+            background:#1e293b;
+            padding:30px;
+            border-radius:24px;
+            margin-bottom:30px;
+            border:1px solid rgba(255,255,255,0.08);
+        }
+
+        .chart-title{
+            font-size:24px;
+            margin-bottom:20px;
+            color:#40bfff;
+        }
+
+        canvas{
+            width:100% !important;
+            height:400px !important;
+        }
+
+        @media(max-width:768px){
+
+            h1{
+                font-size:36px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="topbar">
+
+            <h1>Statistik Sensor</h1>
+
+            <a href="monitoring.html" class="back-btn">
+                ← Kembali
+            </a>
+
+        </div>
+
+        <!-- GRAFIK SUHU -->
+        <div class="chart-container">
+
+            <h2 class="chart-title">
+                Grafik Suhu
+            </h2>
+
+            <canvas id="tempChart"></canvas>
+
+        </div>
+
+        <!-- GRAFIK KELEMBABAN -->
+        <div class="chart-container">
+
+            <h2 class="chart-title">
+                Grafik Kelembaban
+            </h2>
+
+            <canvas id="humChart"></canvas>
+
+        </div>
+
+    </div>
+
+<script>
+
+async function loadStatistics(){
+
+    try{
+
+        const response = await fetch(
+        'http://localhost/monitoring_suhu/history_api.php');
+
+        const data = await response.json();
+
+        // ARRAY DATA
+        let labels = [];
+
+        let tempMasuk = [];
+        let tempPenyimpanan = [];
+
+        let humMasuk = [];
+        let humPenyimpanan = [];
+
+        data.sensors.reverse().forEach(sensor => {
+
+            labels.push(sensor.time);
+
+            if(sensor.zone === 'masuk'){
+
+                tempMasuk.push(sensor.temp);
+                humMasuk.push(sensor.humidity);
+
+                tempPenyimpanan.push(null);
+                humPenyimpanan.push(null);
+
+            }
+            else if(sensor.zone === 'penyimpanan'){
+
+                tempPenyimpanan.push(sensor.temp);
+                humPenyimpanan.push(sensor.humidity);
+
+                tempMasuk.push(null);
+                humMasuk.push(null);
+
+            }
+
+        });
+
+        /* =========================
+           CHART SUHU
+        ========================= */
+
+        new Chart(
+            document.getElementById('tempChart'),
+            {
+                type:'line',
+
+                data:{
+                    labels:labels,
+
+                    datasets:[
+
+                        {
+                            label:'Suhu Masuk',
+                            data:tempMasuk,
+                            borderColor:'#40bfff',
+                            backgroundColor:'transparent',
+                            tension:0.4
+                        },
+
+                        {
+                            label:'Suhu Penyimpanan',
+                            data:tempPenyimpanan,
+                            borderColor:'#f87171',
+                            backgroundColor:'transparent',
+                            tension:0.4
+                        }
+
+                    ]
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    plugins:{
+                        legend:{
+                            labels:{
+                                color:'white'
+                            }
+                        }
+                    },
+
+                    scales:{
+
+                        x:{
+                            ticks:{
+                                color:'white'
+                            }
+                        },
+
+                        y:{
+                            ticks:{
+                                color:'white'
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+        /* =========================
+           CHART KELEMBABAN
+        ========================= */
+
+        new Chart(
+            document.getElementById('humChart'),
+            {
+                type:'line',
+
+                data:{
+                    labels:labels,
+
+                    datasets:[
+
+                        {
+                            label:'Kelembaban Masuk',
+                            data:humMasuk,
+                            borderColor:'#22c55e',
+                            backgroundColor:'transparent',
+                            tension:0.4
+                        },
+
+                        {
+                            label:'Kelembaban Penyimpanan',
+                            data:humPenyimpanan,
+                            borderColor:'#facc15',
+                            backgroundColor:'transparent',
+                            tension:0.4
+                        }
+
+                    ]
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    plugins:{
+                        legend:{
+                            labels:{
+                                color:'white'
+                            }
+                        }
+                    },
+
+                    scales:{
+
+                        x:{
+                            ticks:{
+                                color:'white'
+                            }
+                        },
+
+                        y:{
+                            ticks:{
+                                color:'white'
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+    catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+loadStatistics();
+
+</script>
+
+</body>
+</html>

@@ -6,6 +6,11 @@
     <title>Monitoring System</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<script>
+if(localStorage.getItem('login') !== 'true'){
+    window.location.href = 'login.html';
+}
+</script>
 <body class="landing-body">
 
     <div class="landing-container">
@@ -35,6 +40,5 @@
         </div>
 
     </div>
-
 </body>
 </html>

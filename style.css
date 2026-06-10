@@ -1,14 +1,172 @@
-*{
+body{
     margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:'Segoe UI',sans-serif;
+    background:#030303;
+    color:white;
+    min-height:100vh;
+    overflow:hidden;
 }
 
-body{
-    min-height:100vh;
-    background:#0f172a;
+/* Glow */
+body::before{
+    content:'';
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:#2563eb;
+    filter:blur(220px);
+    opacity:.15;
+    top:-150px;
+    left:-150px;
+}
+
+.dashboard{
+    padding:40px;
+}
+
+/* Profile */
+.admin-profile{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#080808;
+    border:1px solid #222;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:50px;
+}
+
+.avatar{
+    width:60px;
+    height:60px;
+    background:#111;
+    border:2px solid #2563eb;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+}
+
+.admin-profile h2{
+    margin:0;
+}
+
+.admin-profile p{
+    margin:0;
+    color:#888;
+}
+
+.logout-btn{
+    background:#2563eb;
+    border:none;
     color:white;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* Header */
+.header{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.header h1{
+    font-size:48px;
+    margin-bottom:10px;
+}
+
+.header p{
+    color:#999;
+}
+
+/* Cube */
+.cube-container{
+    display:flex;
+    justify-content:center;
+    gap:60px;
+    flex-wrap:wrap;
+}
+
+.cube-card{
+    cursor:pointer;
+    text-align:center;
+}
+
+.cube{
+    width:180px;
+    height:180px;
+
+    background:linear-gradient(
+        145deg,
+        #2563eb,
+        #1e40af
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:80px;
+
+    border-radius:20px;
+
+    transform-style:preserve-3d;
+
+    animation:float 4s ease-in-out infinite;
+
+    box-shadow:
+    0 20px 40px rgba(0,0,0,.5),
+    0 0 25px rgba(37,99,235,.4);
+
+    transition:.5s;
+}
+
+.cube:hover{
+    transform:
+    rotateY(20deg)
+    rotateX(10deg)
+    scale(1.08);
+}
+
+.cube-card h2{
+    margin-top:20px;
+}
+
+.cube-card p{
+    color:#999;
+}
+
+@keyframes float{
+    0%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-15px);
+    }
+    100%{
+        transform:translateY(0);
+    }
+}
+
+/* Animasi masuk */
+.zoom-out{
+    animation:zoomOut .8s forwards;
+}
+
+@keyframes zoomOut{
+
+    0%{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    100%{
+        opacity:0;
+        transform:scale(2);
+    }
+
 }
 
 /* =========================

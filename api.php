@@ -25,19 +25,29 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         true
     );
 
-    $sensor_id = $data['sensor_id'];
-    $zone      = $data['zone'];
-    $temp      = $data['temp'];
-    $humidity  = $data['humidity'];
+    foreach($data['sensors'] as $sensor){
 
-    $sql = "
-    INSERT INTO sensor_log
-    (sensor_id,zone,temperature,humidity)
-    VALUES
-    ('$sensor_id','$zone','$temp','$humidity')
-    ";
+        $sensor_id =
+            $sensor['sensor_id'];
 
-    $conn->query($sql);
+        $zone =
+            $sensor['zone'];
+
+        $temp =
+            $sensor['temp'];
+
+        $humidity =
+            $sensor['humidity'];
+
+        $sql = "
+        INSERT INTO sensor_log
+        (sensor_id,zone,temperature,humidity)
+        VALUES
+        ('$sensor_id','$zone','$temp','$humidity')
+        ";
+
+        $conn->query($sql);
+    }
 
     echo json_encode([
         "status"=>"success"
@@ -58,6 +68,7 @@ WHERE id IN (
     FROM sensor_log
     GROUP BY zone
 )
+ORDER BY sensor_id ASC
 ");
 
 $sensors = [];

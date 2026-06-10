@@ -1,0 +1,671 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pengaturan Sistem</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#030303;
+    color:white;
+    height:100vh;
+    overflow:hidden;
+    position:relative;
+}
+
+body::before{
+    content:'';
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:#2563eb;
+    filter:blur(220px);
+    opacity:.15;
+    top:-250px;
+    left:-150px;
+    z-index:-1;
+}
+
+/* ======================
+   NAVBAR
+====================== */
+
+.navbar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:85px;
+
+    background:rgba(3,3,3,.9);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid #1a1a1a;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 35px;
+
+    z-index:999;
+}
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.avatar{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    box-shadow:
+    0 0 15px rgba(37,99,235,.5);
+}
+
+.brand h2{
+
+    font-size:16px;
+}
+
+.brand p{
+
+    color:#888;
+
+    font-size:12px;
+}
+
+.back-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    transition:.3s;
+}
+
+.back-btn:hover{
+
+    background:#3b82f6;
+}
+
+/* ======================
+   CONTENT
+====================== */
+
+.page-content{
+
+    margin-top:95px;
+
+    padding:15px 20px;
+
+    height:calc(100vh - 95px);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-start;
+}
+
+.settings-card{
+
+    width:950px;
+
+    max-width:90vw;
+
+    background:#080808;
+
+    border:1px solid #1a1a1a;
+
+    border-radius:25px;
+
+    padding:20px;
+
+    box-shadow:
+    0 0 30px rgba(37,99,235,.08);
+
+    animation:
+    cardEnter .6s ease;
+}
+
+@keyframes cardEnter{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0);
+
+    }
+
+}
+
+.settings-card h1{
+
+    color:#3b82f6;
+
+    margin-bottom:18px;
+}
+
+.settings-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:15px;
+}
+
+.setting-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#aaa;
+}
+
+input,
+select{
+
+    width:100%;
+
+    background:#111;
+
+    border:1px solid #222;
+
+    color:white;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    outline:none;
+}
+
+input:focus,
+select:focus{
+
+    border-color:#2563eb;
+}
+
+.checkbox{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    height:42px;
+}
+
+.checkbox input{
+
+    width:auto;
+}
+
+.btn-group{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:18px;
+}
+
+.save-btn{
+
+    flex:1;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+}
+
+.delete-btn{
+
+    background:#dc2626;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 20px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+}
+
+.save-btn:hover{
+
+    background:#3b82f6;
+}
+
+.delete-btn:hover{
+
+    background:#ef4444;
+}
+
+.page-exit{
+
+    animation:
+    pageExit .6s forwards;
+}
+
+@keyframes pageExit{
+
+    from{
+
+        opacity:1;
+
+        transform:
+        scale(1);
+    }
+
+    to{
+
+        opacity:0;
+
+        transform:
+        scale(1.08);
+    }
+
+}
+
+.page-exit{
+
+    animation:zoomOut .8s forwards;
+}
+
+@keyframes zoomOut{
+
+    from{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    to{
+        opacity:0;
+        transform:scale(1.1);
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="avatar">
+            👤
+        </div>
+
+        <div>
+
+            <h2>Admin</h2>
+
+            <p>Monitoring System</p>
+
+        </div>
+
+    </div>
+
+    <a href="#"
+       class="back-btn"
+       onclick="goBack(event)">
+
+       Back
+
+    </a>
+
+</nav>
+
+<div class="page-content">
+
+<div class="settings-card">
+
+<h1>⚙ Pengaturan Sistem</h1>
+
+<div class="settings-grid">
+
+<div class="setting-group">
+<label>
+🔑 Password Lama
+</label>
+
+<input
+type="password"
+id="oldPassword">
+
+</div>
+
+<div class="setting-group">
+
+<label>
+🔒 Password Baru
+</label>
+
+<input
+type="password"
+id="newPassword">
+
+</div>
+
+<div class="setting-group">
+
+<label>
+✅ Konfirmasi Password
+</label>
+
+<input
+type="password"
+id="confirmPassword">
+
+</div>
+
+</div>
+
+<div class="btn-group">
+
+<button
+class="save-btn"
+onclick="saveSettings()">
+
+Simpan Pengaturan
+
+</button>
+
+<button
+class="delete-btn"
+onclick="clearHistory()">
+
+Hapus History
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function loadSettings(){
+
+    document.getElementById(
+    'maxTemp'
+    ).value =
+    localStorage.getItem(
+    'maxTemp'
+    ) || 30;
+
+    document.getElementById(
+    'minHum'
+    ).value =
+    localStorage.getItem(
+    'minHum'
+    ) || 50;
+
+    document.getElementById(
+    'maxHum'
+    ).value =
+    localStorage.getItem(
+    'maxHum'
+    ) || 80;
+
+    document.getElementById(
+    'alarmEnabled'
+    ).checked =
+    localStorage.getItem(
+    'alarmEnabled'
+    ) === 'true';
+
+    document.getElementById(
+    'refreshInterval'
+    ).value =
+    localStorage.getItem(
+    'refreshInterval'
+    ) || 3000;
+
+    if(
+        !localStorage.getItem(
+        'password'
+        )
+    ){
+
+        localStorage.setItem(
+        'password',
+        'admin123'
+        );
+
+    }
+
+}
+
+function saveSettings(){
+
+    localStorage.setItem(
+    'maxTemp',
+    document.getElementById(
+    'maxTemp'
+    ).value
+    );
+
+    localStorage.setItem(
+    'minHum',
+    document.getElementById(
+    'minHum'
+    ).value
+    );
+
+    localStorage.setItem(
+    'maxHum',
+    document.getElementById(
+    'maxHum'
+    ).value
+    );
+
+    localStorage.setItem(
+    'alarmEnabled',
+    document.getElementById(
+    'alarmEnabled'
+    ).checked
+    );
+
+    localStorage.setItem(
+    'refreshInterval',
+    document.getElementById(
+    'refreshInterval'
+    ).value
+    );
+
+    const oldPassword =
+    document.getElementById(
+    'oldPassword'
+    ).value;
+
+    const newPassword =
+    document.getElementById(
+    'newPassword'
+    ).value;
+
+    const confirmPassword =
+    document.getElementById(
+    'confirmPassword'
+    ).value;
+
+    const currentPassword =
+    localStorage.getItem(
+    'password'
+    ) || 'admin123';
+
+    if(
+        newPassword !== ''
+    ){
+
+        if(
+            oldPassword !==
+            currentPassword
+        ){
+
+            alert(
+            'Password lama salah'
+            );
+
+            return;
+        }
+
+        if(
+            newPassword !==
+            confirmPassword
+        ){
+
+            alert(
+            'Konfirmasi password tidak sesuai'
+            );
+
+            return;
+        }
+
+        localStorage.setItem(
+        'password',
+        newPassword
+        );
+
+    }
+
+    alert(
+    'Pengaturan berhasil disimpan'
+    );
+
+}
+
+async function clearHistory(){
+
+    const confirmDelete =
+    confirm(
+    'Hapus semua riwayat sensor?'
+    );
+
+    if(
+        !confirmDelete
+    ) return;
+
+    try{
+
+        await fetch(
+
+        'http://localhost/monitoring_suhu/clear_history.php',
+
+        {
+            method:'POST'
+        });
+
+        alert(
+        'History berhasil dihapus'
+        );
+
+    }
+    catch(error){
+
+        console.log(error);
+
+        alert(
+        'Gagal menghapus history'
+        );
+
+    }
+
+}
+
+function goBack(event){
+
+    event.preventDefault();
+
+    document.querySelector('.page-content')
+            .classList.add('page-exit');
+
+    setTimeout(()=>{
+
+        window.location.href =
+        'monitoring.html';
+
+    },800);
+
+}
+
+loadSettings();
+
+</script>
+
+</body>
+</html>
+```
+

@@ -1,142 +1,334 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistik Sensor</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistik Sensor</title>
 
-    <!-- CHART JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
-        }
+body{
+    background:#030303;
+    color:white;
+    height:100vh;
+    overflow:hidden;
+    position:relative;
+}
 
-        body{
-            background:#07142b;
-            color:white;
-            min-height:100vh;
-        }
+body::before{
+    content:'';
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:#2563eb;
+    filter:blur(220px);
+    opacity:.15;
+    top:-250px;
+    left:-150px;
+    z-index:-1;
+}
 
-        .container{
-            width:90%;
-            margin:auto;
-            padding:40px 0;
-        }
+.navbar{
 
-        .topbar{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:30px;
-        }
+    position:fixed;
+    top:0;
+    left:0;
 
-        h1{
-            font-size:56px;
-            color:#40bfff;
-        }
+    width:100%;
+    height:85px;
 
-        .back-btn{
-            background:#2563eb;
-            color:white;
-            text-decoration:none;
-            padding:14px 24px;
-            border-radius:16px;
-            transition:0.3s;
-            font-size:18px;
-        }
+    background:rgba(3,3,3,.9);
 
-        .back-btn:hover{
-            background:#1d4ed8;
-        }
+    backdrop-filter:blur(15px);
 
-        .chart-container{
-            background:#1e293b;
-            padding:30px;
-            border-radius:24px;
-            margin-bottom:30px;
-            border:1px solid rgba(255,255,255,0.08);
-        }
+    border-bottom:1px solid #1a1a1a;
 
-        .chart-title{
-            font-size:24px;
-            margin-bottom:20px;
-            color:#40bfff;
-        }
+    display:grid;
 
-        canvas{
-            width:100% !important;
-            height:400px !important;
-        }
+    grid-template-columns:
+    260px 1fr 120px;
 
-        @media(max-width:768px){
+    align-items:center;
 
-            h1{
-                font-size:36px;
-            }
+    padding:0 35px;
 
-        }
+    z-index:999;
+}
 
-    </style>
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
+.avatar{
+
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    box-shadow:
+    0 0 15px rgba(37,99,235,.5);
+}
+
+.brand h2{
+    font-size:16px;
+}
+
+.brand p{
+    color:#888;
+    font-size:12px;
+}
+
+.nav-links a{
+    visibility:hidden;
+}
+
+.nav-links{
+    display:flex;
+    justify-content:center;
+    gap:35px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#aaa;
+}
+
+.nav-links a:hover{
+    color:#3b82f6;
+}
+
+.back-btn{
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    text-align:center;
+    padding:10px;
+    border-radius:12px;
+}
+
+.page{
+    margin-top:90px;
+    height:calc(100vh - 90px);
+    padding:15px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+}
+
+.page-content{
+
+    margin-top:105px;
+
+    padding:20px 30px;
+
+    height:calc(100vh - 105px);
+
+    display:flex;
+
+    flex-direction:column;
+
+    animation:fadeInScale .8s ease;
+}
+
+@keyframes fadeInScale{
+
+    from{
+        opacity:0;
+        transform:scale(1.05);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:15px;
+}
+
+.summary-card{
+    background:#080808;
+    border:1px solid #1a1a1a;
+    border-radius:18px;
+    padding:14px;
+    text-align:center;
+}
+
+.summary-card h3{
+    color:#888;
+    font-size:14px;
+}
+
+.summary-card div{
+    margin-top:10px;
+    font-size:22px;
+    color:#3b82f6;
+    font-weight:bold;
+}
+
+.chart-grid{
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.chart-card{
+    background:#080808;
+    border:1px solid #1a1a1a;
+    border-radius:20px;
+    padding:15px;
+}
+
+.chart-card h2{
+    margin-bottom:10px;
+    color:#3b82f6;
+}
+
+.chart-container{
+    height:300px;
+}
+
+canvas{
+    width:100% !important;
+    height:100% !important;
+}
+</style>
 </head>
 
-<body>
+<body class="page-enter">
 
-    <div class="container">
+<nav class="navbar">
 
-        <div class="topbar">
+    <div class="brand">
+        <div class="avatar">👤</div>
+        <div>
+            <h2>Admin</h2>
+            <p>Monitoring System</p>
+        </div>
+    </div>
 
-            <h1>Statistik Sensor</h1>
+    <div class="nav-links">
+        <a href="history.html">Historis</a>
+        <a href="statistik.html">Statistik</a>
+        <a href="settings.html">Pengaturan</a>
+    </div>
 
-            <a href="monitoring.html" class="back-btn">
-                ← Kembali
-            </a>
+    <a href="monitoring.html"
+        class="back-btn"
+        onclick="goBack(event)">
 
+        Back
+
+    </a>
+
+</nav>
+
+<div class="page-content">
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <h3>Max Suhu Area 1</h3>
+            <div id="maxTemp1">0°C</div>
         </div>
 
-        <!-- GRAFIK SUHU -->
-        <div class="chart-container">
-
-            <h2 class="chart-title">
-                Grafik Suhu
-            </h2>
-
-            <canvas id="tempChart"></canvas>
-
+        <div class="summary-card">
+            <h3>Max Suhu Area 2</h3>
+            <div id="maxTemp2">0°C</div>
         </div>
 
-        <!-- GRAFIK KELEMBABAN -->
-        <div class="chart-container">
+        <div class="summary-card">
+            <h3>Avg RH Area 1</h3>
+            <div id="avgHum1">0%</div>
+        </div>
 
-            <h2 class="chart-title">
-                Grafik Kelembaban
-            </h2>
-
-            <canvas id="humChart"></canvas>
-
+        <div class="summary-card">
+            <h3>Avg RH Area 2</h3>
+            <div id="avgHum2">0%</div>
         </div>
 
     </div>
+    <div class="chart-grid">
+        <div class="chart-card">
+            <h2>Grafik Suhu</h2>
+            <div class="chart-container">
+                <canvas id="tempChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h2>Grafik Kelembaban</h2>
+            <div class="chart-container">
+                <canvas id="humChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <script>
+function goBack(event){
+
+    event.preventDefault();
+
+    const content =
+    document.querySelector('.page-content');
+
+    content.style.transition =
+    'all 0.8s ease';
+
+    content.style.transform =
+    'scale(1.1)';
+
+    content.style.opacity =
+    '0';
+
+    setTimeout(()=>{
+
+        window.location.href =
+        'monitoring.html';
+
+    },800);
+
+}
+let tempChart = null;
+let humChart = null;
 
 async function loadStatistics(){
 
     try{
 
-        const response = await fetch(
-        'http://localhost/monitoring_suhu/history_api.php');
+        const response =
+        await fetch(
+        'http://localhost/monitoring_suhu/history_api.php'
+        );
 
-        const data = await response.json();
+        const data =
+        await response.json();
 
-        // ARRAY DATA
         let labels = [];
 
         let tempMasuk = [];
@@ -145,165 +337,164 @@ async function loadStatistics(){
         let humMasuk = [];
         let humPenyimpanan = [];
 
-        data.sensors.reverse().forEach(sensor => {
+        const groupedData = {};
 
-            labels.push(sensor.time);
+        data.sensors.slice().reverse().forEach(sensor => {
+
+            const time = sensor.time.split(' ')[1];
+
+            if(!groupedData[time]){
+                groupedData[time] = {
+                    area1Temp: null,
+                    area2Temp: null,
+                    area1Hum: null,
+                    area2Hum: null
+                };
+            }
 
             if(sensor.zone === 'masuk'){
-
-                tempMasuk.push(sensor.temp);
-                humMasuk.push(sensor.humidity);
-
-                tempPenyimpanan.push(null);
-                humPenyimpanan.push(null);
-
-            }
-            else if(sensor.zone === 'penyimpanan'){
-
-                tempPenyimpanan.push(sensor.temp);
-                humPenyimpanan.push(sensor.humidity);
-
-                tempMasuk.push(null);
-                humMasuk.push(null);
-
+                groupedData[time].area1Temp = Number(sensor.temp);
+                groupedData[time].area1Hum = Number(sensor.humidity);
+            }else{
+                groupedData[time].area2Temp = Number(sensor.temp);
+                groupedData[time].area2Hum = Number(sensor.humidity);
             }
 
         });
+        labels = Object.keys(groupedData);
 
-        /* =========================
-           CHART SUHU
-        ========================= */
+        tempMasuk = labels.map(
+            t => groupedData[t].area1Temp
+        );
 
-        new Chart(
+        tempPenyimpanan = labels.map(
+            t => groupedData[t].area2Temp
+        );
+
+        humMasuk = labels.map(
+            t => groupedData[t].area1Hum
+        );
+
+        humPenyimpanan = labels.map(
+            t => groupedData[t].area2Hum
+        );
+
+        labels = labels.slice(-5);
+        tempMasuk = tempMasuk.slice(-5);
+        tempPenyimpanan = tempPenyimpanan.slice(-5);
+
+        humMasuk = humMasuk.slice(-5);
+        humPenyimpanan = humPenyimpanan.slice(-5);
+
+        const t1 = tempMasuk.filter(v=>v!==null);
+        const t2 = tempPenyimpanan.filter(v=>v!==null);
+
+        const h1 = humMasuk.filter(v=>v!==null);
+        const h2 = humPenyimpanan.filter(v=>v!==null);
+
+        const allTemps = [...t1, ...t2];
+        const minTemp = Math.floor(Math.min(...allTemps)) - 1;
+        const maxTemp = Math.ceil(Math.max(...allTemps)) + 1;
+
+        const allHum = [...h1, ...h2];
+        const minHum = Math.floor(Math.min(...allHum)) - 5;
+        const maxHum = Math.ceil(Math.max(...allHum)) + 5;
+        document.getElementById('maxTemp1').innerText =
+        (t1.length ? Math.max(...t1) : 0) + '°C';
+
+        document.getElementById('maxTemp2').innerText =
+        (t2.length ? Math.max(...t2) : 0) + '°C';
+
+        document.getElementById('avgHum1').innerText =
+        (h1.length ? (h1.reduce((a,b)=>a+b,0)/h1.length).toFixed(1) : 0) + '%';
+
+        document.getElementById('avgHum2').innerText =
+        (h2.length ? (h2.reduce((a,b)=>a+b,0)/h2.length).toFixed(1) : 0) + '%';
+
+        if(tempChart) tempChart.destroy();
+        if(humChart) humChart.destroy();
+
+        tempChart = new Chart(
             document.getElementById('tempChart'),
             {
-                type:'line',
-
+                type:'bar',
                 data:{
                     labels:labels,
-
                     datasets:[
-
                         {
-                            label:'Suhu Masuk',
+                            label:'Area 1',
                             data:tempMasuk,
-                            borderColor:'#40bfff',
-                            backgroundColor:'transparent',
-                            tension:0.4
+                            backgroundColor:'#3b82f6',
+                            barThickness:25              
                         },
-
                         {
-                            label:'Suhu Penyimpanan',
+                            label:'Area 2',
                             data:tempPenyimpanan,
-                            borderColor:'#f87171',
-                            backgroundColor:'transparent',
-                            tension:0.4
+                            backgroundColor:'#ef4444',
+                            barThickness:25
                         }
-
                     ]
                 },
-
                 options:{
-
                     responsive:true,
-
-                    plugins:{
-                        legend:{
-                            labels:{
-                                color:'white'
-                            }
+                    maintainAspectRatio:false,
+                    scales:{
+                        y:{
+                            min:minTemp,
+                            max:maxTemp
                         }
                     },
-
-                    scales:{
-
-                        x:{
-                            ticks:{
-                                color:'white'
-                            }
-                        },
-
-                        y:{
-                            ticks:{
-                                color:'white'
-                            }
+                    datasets:{
+                        bar:{
+                            categoryPercentage:0.25,
+                            barPercentage:0.5
                         }
-
                     }
-
                 }
-
             }
         );
 
-        /* =========================
-           CHART KELEMBABAN
-        ========================= */
-
-        new Chart(
+        humChart = new Chart(
             document.getElementById('humChart'),
             {
-                type:'line',
-
+                type:'bar',
                 data:{
                     labels:labels,
-
                     datasets:[
-
                         {
-                            label:'Kelembaban Masuk',
+                            label:'Area 1',
                             data:humMasuk,
-                            borderColor:'#22c55e',
-                            backgroundColor:'transparent',
-                            tension:0.4
+                            backgroundColor:'#22c55e',
+                            barThickness:25
                         },
-
                         {
-                            label:'Kelembaban Penyimpanan',
+                            label:'Area 2',
                             data:humPenyimpanan,
-                            borderColor:'#facc15',
-                            backgroundColor:'transparent',
-                            tension:0.4
+                            backgroundColor:'#facc15',
+                            barThickness:25
                         }
-
                     ]
                 },
-
                 options:{
-
                     responsive:true,
-
-                    plugins:{
-                        legend:{
-                            labels:{
-                                color:'white'
-                            }
+                    maintainAspectRatio:false,
+                    scales:{
+                        y:{
+                            min:minHum,
+                            max:maxHum
                         }
                     },
-
-                    scales:{
-
-                        x:{
-                            ticks:{
-                                color:'white'
-                            }
-                        },
-
-                        y:{
-                            ticks:{
-                                color:'white'
-                            }
+                    datasets:{
+                        bar:{
+                            categoryPercentage:0.25,
+                            barPercentage:0.5
                         }
-
                     }
-
                 }
-
             }
         );
 
-    }
-    catch(error){
+    }catch(error){
 
         console.log(error);
 
@@ -312,6 +503,7 @@ async function loadStatistics(){
 }
 
 loadStatistics();
+setInterval(loadStatistics,5000);
 
 </script>
 

@@ -1,44 +1,371 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring System</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<script>
-if(localStorage.getItem('login') !== 'true'){
-    window.location.href = 'login.html';
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Monitoring System</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
 }
+
+body{
+    background:#030303;
+    color:white;
+    min-height:100vh;
+    overflow:hidden;
+    position:relative;
+}
+
+/* Glow Background */
+
+body::before{
+    content:'';
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:#2563eb;
+    filter:blur(200px);
+    opacity:.15;
+    top:-150px;
+    left:-150px;
+}
+
+body::after{
+    content:'';
+    position:absolute;
+    width:400px;
+    height:400px;
+    background:#2563eb;
+    filter:blur(180px);
+    opacity:.1;
+    bottom:-150px;
+    right:-150px;
+}
+
+/* Profile */
+
+.admin-profile{
+    position:absolute;
+    top:20px;
+    left:20px;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    background:#080808;
+    border:1px solid #222;
+
+    padding:12px 18px;
+
+    border-radius:16px;
+
+    z-index:10;
+}
+
+.avatar{
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:20px;
+}
+
+.admin-info h3{
+    font-size:15px;
+}
+
+.admin-info p{
+    color:#888;
+    font-size:12px;
+}
+
+.logout-btn{
+    margin-left:15px;
+
+    background:#2563eb;
+    color:white;
+
+    border:none;
+    border-radius:10px;
+
+    padding:10px 15px;
+
+    cursor:pointer;
+}
+
+/* Main */
+
+.container{
+    height:100vh;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+}
+
+.title{
+    font-size:50px;
+    font-weight:bold;
+    margin-top:40px;
+}
+
+.subtitle{
+    color:#888;
+    margin-top:10px;
+    margin-bottom:70px;
+}
+
+/* Octahedron */
+
+.formula-scene{
+    width:300px;
+    height:300px;
+    position:relative;
+    overflow:visible;
+    cursor:pointer;
+}
+
+.floating-formula{
+
+    position:absolute;
+
+    color:#4f555c;
+
+    font-weight:bold;
+
+    transition:
+        transform 2s ease-in-out;
+
+    text-shadow:
+        0 0 6px #c3c2c2,
+        0 0 12px #fafafa;
+
+    opacity:.7;
+
+    pointer-events:none;
+}
+
+
+.monitor-text{
+    margin-top:50px;
+}
+
+.monitor-text h2{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.monitor-text p{
+    color:#888;
+}
+
+/* Zoom Animation */
+
+.zoom-out{
+    animation:zoomOut .8s forwards;
+}
+
+@keyframes zoomOut{
+
+    from{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    to{
+        opacity:0;
+        transform:scale(2);
+    }
+
+}
+
+</style>
+</head>
+
+<script>
+
+if(localStorage.getItem('login') !== 'true'){
+    window.location.href='login.html';
+}
+
 </script>
-<body class="landing-body">
 
-    <div class="landing-container">
+<body>
 
-        <h1 class="main-title">
-            Monitoring System
-        </h1>
+<div class="admin-profile">
 
-        <p class="subtitle">
-            Monitoring Suhu dan Kelembaban Gudang Real-Time
-        </p>
+    <div class="avatar">
+        👤
+    </div>
 
-        <div class="monitor-grid">
+    <div class="admin-info">
+        <h3>Admin</h3>
+        <p>Monitoring Gudang</p>
+    </div>
 
-            <a href="monitoring.html?zone=masuk" class="monitor-card">
-                <div class="icon">📦</div>
-                <h2>Area 1</h2>
-                <p>Monitoring area masuk gudang</p>
-            </a>
+    <button class="logout-btn"
+            onclick="logout()">
+        Logout
+    </button>
 
-            <a href="monitoring.html?zone=penyimpanan" class="monitor-card">
-                <div class="icon">📦</div>
-                <h2>Area 2</h2>
-                <p>Monitoring area penyimpanan barang</p>
-            </a>
+</div>
 
-        </div>
+<div class="container">
+
+    <h1 class="title">
+        System
+    </h1>
+
+    <p class="subtitle">
+        Monitoring Suhu & Kelembaban Gudang Real-Time
+    </p>
+
+    <div class="formula-scene"
+     onclick="goMonitoring()">
 
     </div>
+
+    <div class="monitor-text">
+
+        <h2>By Esp8266</h2>
+
+        <p>
+            Tap to open
+        </p>
+
+    </div>
+
+</div>
+
+<script>
+
+function logout(){
+
+    localStorage.removeItem('login');
+
+    window.location.href='login.html';
+
+}
+const symbols = [
+
+        "°C",
+        "°F",
+        "RH%",
+
+        "Heat Index",
+        "Dew Point",
+
+        "T = 25°C",
+        "H = 70%",
+
+        "°F=(°C×9/5)+32",
+
+        "°C=(°F−32)×5/9",
+
+        "Humidity",
+
+        "Temperature"
+
+    ];
+function goMonitoring(){
+    document.body.classList.add('zoom-out');
+
+    setTimeout(()=>{
+
+        window.location.href='monitoring.html';
+
+    },800);
+
+}
+
+function createFormula(){
+
+    const container =
+        document.querySelector('.formula-scene');
+
+    const formula =
+        document.createElement('span');
+
+    formula.classList.add(
+        'floating-formula'
+    );
+
+    formula.innerText =
+        symbols[
+            Math.floor(
+                Math.random()
+                *
+                symbols.length
+            )
+        ];
+
+    const centerX = 35;
+    const centerY = 50;
+
+    formula.style.left =
+        (centerX + (Math.random()-0.5)*10) + '%';
+
+    formula.style.top =
+        (centerY + (Math.random()-0.5)*10) + '%';
+
+    formula.style.fontSize =
+        (12 + Math.random()*12) + 'px';
+    
+    formula.style.transform =
+        `rotate(${Math.random()*360}deg)`;
+
+    container.appendChild(formula);
+    moveRandom(formula);
+
+    setTimeout(()=>{
+
+        formula.remove();
+
+    },12000);
+
+}
+
+function moveRandom(el){
+
+    setInterval(() => {
+
+        const x = (Math.random()-0.5) * 200;
+        const y = (Math.random()-0.5) * 200;
+        const r = (Math.random()-0.5) * 60;
+
+        el.style.transform =
+            `translate(${x}px, ${y}px)
+             rotate(${r}deg)`;
+
+    },2000);
+
+}
+
+window.onload = () => {
+
+    setInterval(createFormula,800);
+
+}
+</script>
+
 </body>
 </html>

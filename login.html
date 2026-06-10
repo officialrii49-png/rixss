@@ -4,7 +4,171 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Monitoring</title>
-    <link rel="stylesheet" href="style.css">
+
+    <style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+        background:#030303;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        min-height:100vh;
+        overflow:hidden;
+    }
+
+    /* Glow Background */
+    body::before{
+        content:'';
+        position:absolute;
+        width:400px;
+        height:400px;
+        background:#2563eb;
+        filter:blur(180px);
+        opacity:.25;
+        border-radius:50%;
+    }
+
+    /* Tali Lanyard */
+    .login-container{
+        position:relative;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+
+    .login-container::before{
+        content:'';
+        position:absolute;
+        top:-170px;
+        width:8px;
+        height:170px;
+        background:linear-gradient(#111,#444,#111);
+        border-radius:20px;
+    }
+
+    .login-container::after{
+        content:'';
+        position:absolute;
+        top:-20px;
+        width:40px;
+        height:40px;
+        border:4px solid #666;
+        border-radius:50%;
+        background:#030303;
+        z-index:1;
+    }
+
+    /* ID CARD */
+    .login-box{
+        width:340px;
+        padding:40px 30px;
+        background:#080808;
+        border:1px solid #222;
+        border-radius:24px;
+        box-shadow:
+        0 25px 60px rgba(0,0,0,.8),
+        0 0 25px rgba(37,99,235,.15);
+        position:relative;
+        overflow:hidden;
+    }
+
+    /* Efek hologram */
+    .login-box::before{
+        content:'';
+        position:absolute;
+        inset:0;
+        background:linear-gradient(
+        135deg,
+        transparent 40%,
+        rgba(59,130,246,.15) 50%,
+        transparent 60%);
+        background-size:300% 300%;
+        animation:holo 5s linear infinite;
+    }
+
+    @keyframes holo{
+        0%{background-position:0% 0%;}
+        100%{background-position:300% 300%;}
+    }
+
+    .login-box h1{
+        color:white;
+        text-align:center;
+        font-size:32px;
+        margin-bottom:8px;
+        position:relative;
+        z-index:2;
+    }
+
+    .login-box p{
+        color:#888;
+        text-align:center;
+        margin-bottom:30px;
+        position:relative;
+        z-index:2;
+    }
+
+    .login-box input{
+        width:100%;
+        padding:14px;
+        margin-bottom:15px;
+        background:#111;
+        border:1px solid #222;
+        border-radius:12px;
+        color:white;
+        outline:none;
+        transition:.3s;
+        position:relative;
+        z-index:2;
+    }
+
+    .login-box input:focus{
+        border-color:#2563eb;
+        box-shadow:0 0 15px rgba(37,99,235,.4);
+    }
+
+    .login-box button{
+        width:100%;
+        padding:14px;
+        border:none;
+        border-radius:12px;
+        background:#2563eb;
+        color:white;
+        font-weight:bold;
+        cursor:pointer;
+        transition:.3s;
+        position:relative;
+        z-index:2;
+    }
+
+    .login-box button:hover{
+        background:#3b82f6;
+        transform:translateY(-2px);
+        box-shadow:0 0 20px rgba(37,99,235,.5);
+    }
+
+    .login-box .badge{
+        width:70px;
+        height:70px;
+        border-radius:50%;
+        background:#111;
+        border:2px solid #2563eb;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        margin:0 auto 20px;
+        color:#2563eb;
+        font-size:28px;
+        position:relative;
+        z-index:2;
+    }
+    </style>
 </head>
 <body class="login-body">
 
@@ -12,10 +176,15 @@
 
     <div class="login-box">
 
+        <div class="badge">
+            🔒
+        </div>
+
         <h1>Admin</h1>
         <p>Login Sistem Monitoring Gudang</p>
 
         <input type="text" id="username" placeholder="Username">
+
         <input type="password" id="password" placeholder="Password">
 
         <button onclick="login()">
@@ -36,16 +205,29 @@ function login(){
     const password =
     document.getElementById('password').value;
 
-    if(username === 'admin' && password === 'admin123'){
+    const savedPassword =
+    localStorage.getItem('password')
+    || 'admin123';
 
-        localStorage.setItem('login','true');
+    if(
+        username === 'admin' &&
+        password === savedPassword
+    ){
 
-        window.location.href = 'index.html';
+        localStorage.setItem(
+        'login',
+        'true'
+        );
+
+        window.location.href =
+        'index.html';
 
     }
     else{
 
-        alert('Username atau password salah');
+        alert(
+        'Username atau password salah'
+        );
 
     }
 

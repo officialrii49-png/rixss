@@ -11,19 +11,13 @@ $conn = new mysqli(
 );
 
 if($conn->connect_error){
-
     die("Koneksi gagal");
-
 }
-
-/* =========================================
-   AMBIL SEMUA HISTORY SENSOR
-========================================= */
 
 $result = $conn->query("
 SELECT *
 FROM sensor_log
-ORDER BY created_at DESC
+ORDER BY id DESC
 ");
 
 $sensors = [];
